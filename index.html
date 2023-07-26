@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ASC FACTS</title>
+    <!-- Add any meta tags, CSS or JavaScript links here if needed -->
+    <link rel = "icon" href = 
+    "ASC.png" 
+            type = "image/x-icon">
+    
+    <style>
+        /* Existing CSS styles remain unchanged */
+
+        /* Add styles for the loading animation */
+        @keyframes pulse {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1); }
+            100% { transform: scale(0.8); }
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+
+        .loading-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f44336;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f44336;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            text-align: center;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        nav a:hover {
+            color: #f44336;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 30px;
+            color: #f44336;
+        }
+
+        #videos-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .video-card {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 300px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+        }
+
+        iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+
+        h3 {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        /* Additional Animations */
+        .fadeIn {
+            animation: fadeIn 1s ease;
+        }
+
+        .scaleIn {
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Styles */
+        /* ... (existing media query styles) ... */
+
+        /* Styles for Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #c62828;
+        }
+        @media screen and (max-width: 768px) {
+            /* Adjust the layout for smaller screens */
+            header {
+                padding: 5px;
+            }
+
+            nav {
+                padding: 5px;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            .video-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ASC FACTS</h1>
+    </header>
+
+    <!-- Add the Hero Section -->
+    <div class="hero-section">
+        <h2><CENTER>Welcome to ASC FACTS</CENTER></h2>
+    </div>
+
+    <nav class="sticky">
+        <!-- Add links to your website's pages or sections here -->
+        <a href="https://www.youtube.com/@ascfacts3">Home</a>
+        <a href="https://www.youtube.com/@ascfacts3">About</a>
+        <a href="https://www.youtube.com/@ascfacts3">Videos</a>
+        <a href="https://www.youtube.com/@ascfacts3">Contact</a>
+    </nav>
+
+    <main>
+        <!-- Add the loading animation -->
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+        <div id="videos-container"></div>
+        <!-- Additional Button Block -->
+        
+        <div class="btn-container">
+            <!-- ... (existing buttons) ... -->
+            <button class="btn" onclick="openSubscribePopup()">Subscribe</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-media-icons">
+            <!-- Add social media icons with links to your other platforms -->
+        </div>
+        &copy; 2023 ASC FACTS reserved.
+    </footer>
+
+    <!-- Add this script tag to the end of the <body> section of your HTML -->
+    <script>
+        // Replace 'YOUR_API_KEY' with your actual YouTube API key
+        const apiKey = 'AIzaSyCVFZN07D8AYOrP5YT5FUGwKhFYhSxGJiw';
+        const channelId = 'UCRwoGYDVDn3VsJmIIuGnShg'; // Replace with ASC FACTS
+        const maxResults = 15; // Set the number of videos to display
+
+        // Function to fetch the latest videos from your channel
+        function fetchLatestVideos() {
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=${maxResults}`;
+            showLoadingAnimation();
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items && data.items.length > 0) {
+                        // Parse the data and generate the HTML code to display the videos
+                        const videosContainer = document.getElementById('videos-container');
+                        videosContainer.innerHTML = ''; // Clear previous content
+
+                        data.items.forEach(item => {
+                            const videoId = item.id.videoId;
+                            const videoTitle = item.snippet.title;
+                            hideLoadingAnimation();
+                            const videoHtml = `
+                                <div class="video-card">
+                                    <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                                    <h3>${videoTitle}</h3>
+                                </div>
+                            `;
+
+                            videosContainer.innerHTML += videoHtml;
+                        });
+                    } else {
+                        console.error('No videos found for the specified channel.');
+                    }
+                })
+                .catch(error => console.error('Error fetching videos:', error));
+        }
+
+        // Call the fetchLatestVideos function when the page loads
+        window.addEventListener('load', fetchLatestVideos);
+
+        // Function to show the loading animation
+        function showLoadingAnimation() {
+            const loadingElement = document.querySelector('.loading');
+            loadingElement.style.display = 'flex';
+        }
+
+        // Function to hide the loading animation
+        function hideLoadingAnimation() {
+            const loadingElement = document.querySelector('.loading');
+            loadingElement.style.display = 'none';
+        }
+
+        function openSubscribePopup() {
+            // Replace 'CHANNEL_ID' with your actual YouTube channel ID
+            const channelID = 'UCRwoGYDVDn3VsJmIIuGnShg'; // Replace with ASC FACTS ID
+
+            window.open(`https://www.youtube.com/channel/${channelID}?sub_confirmation=1`, '_blank');
+        }
+    </script>
+</body>
+</html>
